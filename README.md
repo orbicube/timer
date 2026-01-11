@@ -3,8 +3,8 @@ pyglet countdown timer.
 ## Installation
 ### Python (3.11+)
 ```
-  python -m pip install -r requirements.txt
-  python sorcle.py
+  python -m pip install pyglet
+  python timer.py
 ```
 ### Windows
 Run the standalone .exe from [Releases](https://github.com/orbicube/timer/releases/latest).
