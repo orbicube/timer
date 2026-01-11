@@ -21,7 +21,7 @@ class Timer:
         self.active = False
         self.seconds = settings["timer"]["seconds"]
 
-        for i in range(0,4):
+        for i in range(0,5):
             self.digits.append(pyglet.text.Label(
                 '0', x=300*i, y=200, width=300,
                 font_name=settings["font"]["name"],
@@ -32,17 +32,17 @@ class Timer:
 
     def update(self):
 
-        if self.seconds > 5999:
-            disp_seconds = 5999
+        if self.seconds > 59999:
+            disp_seconds = 59999
         else:
             disp_seconds = self.seconds
 
         minutes = disp_seconds // 60
         rem_seconds = disp_seconds - (minutes * 60)
-        digit_list = [int(minutes/10), minutes % 10,
-            int(rem_seconds/10), rem_seconds % 10]
+        digit_list = [minutes//100, minutes//10, minutes % 10,
+            rem_seconds//10, rem_seconds % 10]
 
-        for i in range(0,4):
+        for i in range(0,5):
             self.digits[i].text = str(digit_list[i])
 
             if self.active:
@@ -54,7 +54,7 @@ class Timer:
 class Window(pyglet.window.Window):
 
     def __init__(self):
-        super().__init__(width=1200, height=400, vsync=False,
+        super().__init__(width=1500, height=400, vsync=False,
             caption="timer", style='transparent')      
 
         self.timer = Timer()
