@@ -7,7 +7,7 @@ pyglet countdown timer.
   python sorcle.py
 ```
 ### Windows
-Run the standalone .exe from [Releases](https://github.com/orbicube/sorcle/releases/latest).
+Run the standalone .exe from [Releases](https://github.com/orbicube/timer/releases/latest).
 ## Usage
 * To start the timer, create a file called "run" in the directory. Deleting it will pause the timer.
 * To add the starting value back onto the timer, create a file called "add" in the directory.
