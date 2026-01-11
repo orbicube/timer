@@ -32,14 +32,16 @@ class Timer:
 
     def update(self):
 
+        # Cap at 999:59 - it will still count above that just not show it
         if self.seconds > 59999:
             disp_seconds = 59999
         else:
             disp_seconds = self.seconds
 
+        # separate seconds into each digit
         minutes = disp_seconds // 60
         rem_seconds = disp_seconds - (minutes * 60)
-        digit_list = [minutes//100, minutes//10, minutes % 10,
+        digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
             rem_seconds//10, rem_seconds % 10]
 
         for i in range(0,5):
@@ -59,6 +61,7 @@ class Window(pyglet.window.Window):
 
         self.timer = Timer()
 
+        # run tick() every second
         pyglet.clock.schedule_interval(self.tick, 1)
 
 
@@ -75,7 +78,6 @@ class Window(pyglet.window.Window):
 
     def on_draw(self):
         self.clear()
-        pyglet.clock.tick()
 
         if pathlib.Path(path.join(w_dir, "run")).is_file():
             self.timer.active = True
@@ -91,14 +93,19 @@ class Window(pyglet.window.Window):
             with open(path.join(w_dir, "custom")) as f:
                 self.timer.seconds += int(f.readline())
 
+                # Since you can remove time this way, stop it if it's under 1
                 if self.timer.seconds <= 0:
                     self.timer.seconds = 0
+
             os.remove(path.join(w_dir, "custom"))  
 
         if pathlib.Path(path.join(w_dir, "reset")).is_file():
+            # Create new timer with settings
             self.timer = Timer()
+
             os.remove(path.join(w_dir, "reset"))
 
+            # Turn it off if it was on
             if pathlib.Path(path.join(w_dir, "run")).is_file():
                 os.remove(path.join(w_dir, "run"))
 
