@@ -17,7 +17,7 @@ Run the standalone .exe from [Releases](https://github.com/orbicube/timer/releas
 * To use in OBS, create a capture of the source for each digit and crop. The window is 1200px wide, so 0-300, 300-600, 600-900, 900-1200.
 
 ## Configuration
-settings.toml is configurable
+settings.toml is configurable. 
 ### Reference
 ```
 [timer]
