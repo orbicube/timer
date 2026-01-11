@@ -91,7 +91,11 @@ class Window(pyglet.window.Window):
 
         if pathlib.Path(path.join(w_dir, "custom")).is_file():
             with open(path.join(w_dir, "custom")) as f:
-                self.timer.seconds += int(f.readline())
+                # If file doesn't have an integer in it, just ignore it
+                try:
+                    self.timer.seconds += int(f.readline())
+                except:
+                    pass
 
                 # Since you can remove time this way, stop it if it's under 1
                 if self.timer.seconds <= 0:
