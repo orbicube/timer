@@ -25,7 +25,7 @@ seconds: Integer # How long to run the timer for, and how much will be added wit
 
 [font]
 name: String # Font name installed on the system
-font: Integer # Font size, too large may crash; Comic Sans is good up to 270 whereas Arial can go up to 340
+font: Integer # Font size, too large may crash; Arial can go up to 340 whereas Comic Sans MS is good up to 270
 color: Array # RGB integer array for colour to use while counting down
 inactive_color: Array # RGB integer array for colour to use while inactive
 
