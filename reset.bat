@@ -1,0 +1,1 @@
+copy NUL %~dp0\reset
