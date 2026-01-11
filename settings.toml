@@ -1,8 +1,13 @@
 [timer]
+# How long to run the timer for, and how much will be added with the "add" command
 "seconds" = 1800
 
 [font]
+ # Font name installed on the system
 "name" = "Arial"
-"size" = 330
+# Font size, too large may crash; Arial can go up to 340 whereas Comic Sans MS is good up to 270 
+"size" = 250
+# RGB integer array for colour to use while counting down
 "color" = [255, 255, 255]
+# RGB integer array for colour to use while inactive
 "inactive_color" = [196, 196, 196]
