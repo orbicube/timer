@@ -12,9 +12,9 @@ Run the standalone .exe from [Releases](https://github.com/orbicube/timer/releas
 * To start the timer, create a file called "run" in the directory. Deleting it will pause the timer.
 * To add the starting value back onto the timer, create a file called "add" in the directory.
 * To reset the timer, create a file called "reset" in the directory.
-* To add a custom amount of time onto the timer, create a file called "custom" to the directory with a text value of the amount of seconds to add. Use a script for this.
+* To add (or remove with - in front) a custom amount of time, create a file called "custom" to the directory with a text value of the amount of seconds to add. Use a script for this.
 * For Windows users there is a .bat file to trigger these with a Stream Deck or similar application.
-* To use in OBS, create a capture of the source for each digit and crop. The window is 1200px wide, so 0-300, 300-600, 600-900, 900-1200.
+* To use in OBS, create a capture of the source for each digit and crop. The window is 1500px wide, so 0-300, 300-600, 600-900, 900-1200, 1200-1500.
 
 ## Configuration
 settings.toml is configurable. 
