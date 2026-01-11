@@ -26,7 +26,7 @@ seconds: Integer # How long to run the timer for, and how much will be added wit
 [font]
 name: String # Font name installed on the system
 font: Integer # Font size, will likely be very large
-color: Array # Color to use while counting down as RGB integer array
-inactive_color: Array # Color to use while inactive as RGB array
+color: Array # RGB integer array for colour to use while counting down
+inactive_color: Array # RGB integer array for colour to use while inactive
 
 ```
