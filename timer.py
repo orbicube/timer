@@ -3,6 +3,8 @@ import pathlib
 import sys, os
 from os import path
 
+from text_fix import ArcadeTextLayoutGroup
+
 if getattr(sys, 'frozen', False):
     w_dir = pathlib.Path(sys._MEIPASS).parent
 else:
@@ -44,6 +46,7 @@ class Timer:
         digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
             rem_seconds//10, rem_seconds % 10]
 
+
         for i in range(0,5):
             self.digits[i].text = str(digit_list[i])
 
@@ -58,6 +61,8 @@ class Window(pyglet.window.Window):
     def __init__(self):
         super().__init__(width=1500, height=400, vsync=False,
             caption="timer", style='transparent')      
+
+        pyglet.text.layout.TextLayout.group_class = ArcadeTextLayoutGroup
 
         self.timer = Timer()
 
