@@ -3,6 +3,8 @@ import pathlib
 import sys, os
 from os import path
 
+import datetime
+
 from text_fix import ArcadeTextLayoutGroup
 
 if getattr(sys, 'frozen', False):
@@ -39,13 +41,15 @@ class Timer:
             disp_seconds = 59999
         else:
             disp_seconds = self.seconds
+    
+        with open(path.join(w_dir, "current.txt"), 'w') as f:
+            f.write(str(datetime.timedelta(seconds=self.seconds)))
 
         # separate seconds into each digit
         minutes = disp_seconds // 60
         rem_seconds = disp_seconds - (minutes * 60)
         digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
             rem_seconds//10, rem_seconds % 10]
-
 
         for i in range(0,5):
             self.digits[i].text = str(digit_list[i])
@@ -75,6 +79,12 @@ class Window(pyglet.window.Window):
             if self.timer.seconds <= 0:
                 self.timer.active = False
                 os.remove(path.join(w_dir, "run"))
+
+                if settings["alarm"]["enabled"]:
+                    alarm = pyglet.media.load(
+                        path.join(w_dir, settings["alarm"]["file"]))
+                    alarm.play().volume = settings["alarm"]["volume"] 
+
             else:  
                 self.timer.seconds -= 1
 
