@@ -15,6 +15,7 @@ else:
 import tomllib
 with open(path.join(w_dir, "settings.toml"), "rb") as f:
     settings = tomllib.load(f)
+s_window = settings["window"]
 
 class Timer:
 
@@ -63,8 +64,9 @@ class Timer:
 class Window(pyglet.window.Window):
 
     def __init__(self):
-        super().__init__(width=1500, height=400, vsync=False,
-            caption="timer", style='transparent')      
+        super().__init__(width=1500, height=400,
+            vsync=False, caption="timer",
+            style=f"{'transparent' if s_window['transparent'] else 'dialog'}")      
 
         pyglet.text.layout.TextLayout.group_class = ArcadeTextLayoutGroup
 
@@ -140,4 +142,11 @@ if pathlib.Path(path.join(w_dir, "reset")).is_file():
 if pathlib.Path(path.join(w_dir, "custom")).is_file():
     os.remove(path.join(w_dir, "custom"))
 window = Window()
+
+if not s_window["transparent"]:
+    pyglet.gl.glClearColor(
+        s_window["bg_color"][0],
+        s_window["bg_color"][1],
+        s_window["bg_color"][2], 1)
+
 pyglet.app.run(1/5)
