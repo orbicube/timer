@@ -29,4 +29,9 @@ font: Integer # Font size, too large may crash; Arial can go up to 340 whereas C
 color: Array # RGB integer array for colour to use while counting down
 inactive_color: Array # RGB integer array for colour to use while inactive
 
+[alarm]
+enabled: Boolean
+file: String # File name, likely WAV only
+volume: Float # 1.0 = 100%
+
 ```
