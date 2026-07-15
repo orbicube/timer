@@ -22,6 +22,7 @@ settings.toml is configurable.
 ```
 [timer]
 seconds: Integer # How long to run the timer for, and how much will be added with the "add" command
+hours: Boolean # Whether the first digit should be hours
 
 [font]
 name: String # Font name installed on the system
@@ -34,4 +35,7 @@ enabled: Boolean
 file: String # File name, likely WAV only
 volume: Float # 1.0 = 100%
 
+[window]
+transparent: Boolean # Whether the window should be transparent
+bg_color: Array[Int] # If window is not transparent, the background color to use
 ```
