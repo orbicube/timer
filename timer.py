@@ -49,8 +49,14 @@ class Timer:
         # separate seconds into each digit
         minutes = disp_seconds // 60
         rem_seconds = disp_seconds - (minutes * 60)
-        digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
-            rem_seconds//10, rem_seconds % 10]
+        if settings["timer"]["hours"]:
+            hours = minutes // 60
+            rem_minutes = minutes - (hours * 60)
+            digit_list = [hours, rem_minutes//10 % 10, rem_minutes % 10,
+                rem_seconds // 10, rem_seconds % 10]
+        else:
+            digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
+                rem_seconds//10, rem_seconds % 10]
 
         for i in range(0,5):
             self.digits[i].text = str(digit_list[i])
