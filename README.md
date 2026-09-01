@@ -23,6 +23,8 @@ settings.toml is configurable.
 [timer]
 seconds: Integer # How long to run the timer for, and how much will be added with the "add" command
 hours: Boolean # Whether the first digit should be hours
+resume: Boolean # Whether to resume the timer from current.txt on launch
+values: Dictionary # Program will look for text fiels with the given names and add time based on number specified
 
 [font]
 name: String # Font name installed on the system

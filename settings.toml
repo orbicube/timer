@@ -2,6 +2,12 @@
 # How long to run the timer for, and how much will be added with the "add" command
 seconds = 1800
 hours = true
+# Whether to resume the timer from current.txt on launch
+resume = true
+# Dictionary of custom values that program recognises
+# It will look for text files with the given names and then add time based on number inside
+# e.g. dollar containing 2.50 will add 150 seconds
+values = { dollar = 60.0, bit = 0.6, sub = 300.0, tier2 = 600.0, tier3 = 1500.0, prime = 180.0 }
 
 [font]
  # Font name installed on the system

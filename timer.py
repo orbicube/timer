@@ -16,6 +16,18 @@ import tomllib
 with open(path.join(w_dir, "settings.toml"), "rb") as f:
     settings = tomllib.load(f)
 s_window = settings["window"]
+s_timer = settings["timer"]
+
+def clean_files(extra: str = None):
+    files = ["add", "reset", "custom"]
+    files.extend(s_timer["values"].keys())
+    if extra:
+        files.extend(extra)
+
+    for f in files:
+        if pathlib.Path(path.join(w_dir, f)).is_file():
+            os.remove(path.join(w_dir, f))  
+
 
 class Timer:
 
@@ -24,41 +36,59 @@ class Timer:
 
         self.digits = []
         self.active = False
-        self.seconds = settings["timer"]["seconds"]
 
-        for i in range(0,5):
-            self.digits.append(pyglet.text.Label(
-                '0', x=300*i, y=200, width=300,
-                font_name=settings["font"]["name"],
-                font_size=settings["font"]["size"],
-                align='center', anchor_y='center',
-                color=tuple(settings["font"]["color"]),
-                batch=self.batch))
+        if s_timer["resume"]:
+            try:
+                with open(path.join(w_dir, "current.txt")) as f:
+                    str_time = f.read()
+                self.seconds = sum(x * float(t) for x, t in zip([1, 60, 3600], reversed(str_time.split(":"))))
+            except:
+                self.seconds = float(s_timer["seconds"])
+        else:
+            self.seconds = float(s_timer["seconds"])
+
+        for i in range(0,2):
+            for j in range(0,4):
+                self.digits.append(pyglet.text.Label(
+                    '0', x=300*j, y=600-(i*400), width=300,
+                    font_name=settings["font"]["name"],
+                    font_size=settings["font"]["size"],
+                    align='center', anchor_y='center',
+                    color=tuple(settings["font"]["color"]),
+                    batch=self.batch))
+
 
     def update(self):
 
-        # Cap at 999:59 - it will still count above that just not show it
-        if self.seconds > 59999:
-            disp_seconds = 59999
+        # Cap at 9999:99:99 - it will still count above that just not show it
+        if self.seconds > 35999999:
+            disp_seconds = 35999999
         else:
-            disp_seconds = self.seconds
-    
+            disp_seconds = int(self.seconds)
+
         with open(path.join(w_dir, "current.txt"), 'w') as f:
-            f.write(str(datetime.timedelta(seconds=self.seconds)))
+            tdelta = str(datetime.timedelta(seconds=self.seconds))
+            if "." in tdelta:
+                tdelta = tdelta[:-7]
+            f.write(tdelta)
 
         # separate seconds into each digit
         minutes = disp_seconds // 60
         rem_seconds = disp_seconds - (minutes * 60)
-        if settings["timer"]["hours"]:
+        if s_timer["hours"]:
             hours = minutes // 60
             rem_minutes = minutes - (hours * 60)
-            digit_list = [hours, rem_minutes//10 % 10, rem_minutes % 10,
+            digit_list = [hours//1000, hours//100 % 100,
+                hours//10 % 10, hours % 10,
+                rem_minutes//10 % 10, rem_minutes % 10,
                 rem_seconds // 10, rem_seconds % 10]
         else:
-            digit_list = [minutes//100, minutes//10 % 10, minutes % 10,
+            digit_list = [minutes//100000,
+                minutes//10000 % 10000, minutes//1000 % 1000,
+                minutes//100 % 100, minutes//10 % 10, minutes % 10,
                 rem_seconds//10, rem_seconds % 10]
 
-        for i in range(0,5):
+        for i in range(0,8):
             self.digits[i].text = str(digit_list[i])
 
             if self.active:
@@ -70,7 +100,7 @@ class Timer:
 class Window(pyglet.window.Window):
 
     def __init__(self):
-        super().__init__(width=1500, height=400,
+        super().__init__(width=1200, height=800,
             vsync=False, caption="timer",
             style=f"{'transparent' if s_window['transparent'] else 'dialog'}")      
 
@@ -108,9 +138,7 @@ class Window(pyglet.window.Window):
             self.timer.active = False
 
         if pathlib.Path(path.join(w_dir, "add")).is_file():
-            self.timer.seconds += settings["timer"]["seconds"]
-
-            os.remove(path.join(w_dir, "add"))  
+            self.timer.seconds += s_timer["seconds"]
 
         if pathlib.Path(path.join(w_dir, "custom")).is_file():
             with open(path.join(w_dir, "custom")) as f:
@@ -124,29 +152,41 @@ class Window(pyglet.window.Window):
                 if self.timer.seconds <= 0:
                     self.timer.seconds = 0
 
-            os.remove(path.join(w_dir, "custom"))  
-
         if pathlib.Path(path.join(w_dir, "reset")).is_file():
             # Create new timer with settings
             self.timer = Timer()
-
-            os.remove(path.join(w_dir, "reset"))
 
             # Turn it off if it was on
             if pathlib.Path(path.join(w_dir, "run")).is_file():
                 os.remove(path.join(w_dir, "run"))
 
+        for v in s_timer["values"].keys():
+            if pathlib.Path(path.join(w_dir, v)).is_file():
+                with open(path.join(w_dir, v)) as f:
+                    lines = []
+                    for line in f:
+                        lines.append(line)
+
+                try:
+                    add_time = float(lines[0]) * s_timer["values"][v]
+
+                    if len(lines) > 1:
+                        try:
+                            add_time *= float(lines[1])
+                        except:
+                            pass
+
+                    self.timer.seconds += add_time
+                except:
+                    pass
+
+
         self.timer.update()
         self.timer.batch.draw()
 
-if pathlib.Path(path.join(w_dir, "run")).is_file():
-    os.remove(path.join(w_dir, "run"))  
-if pathlib.Path(path.join(w_dir, "add")).is_file():
-    os.remove(path.join(w_dir, "add"))
-if pathlib.Path(path.join(w_dir, "reset")).is_file():
-    os.remove(path.join(w_dir, "reset"))
-if pathlib.Path(path.join(w_dir, "custom")).is_file():
-    os.remove(path.join(w_dir, "custom"))
+        clean_files()
+
+clean_files(extra="run")
 window = Window()
 
 if not s_window["transparent"]:
