@@ -170,7 +170,7 @@ class Window(pyglet.window.Window):
                 try:
                     add_time = float(lines[0]) * s_timer["values"][v]
 
-                    if len(lines) > 1:
+                    if len(lines) > 1 and s_timer["multiplier"]:
                         try:
                             add_time *= float(lines[1])
                         except:

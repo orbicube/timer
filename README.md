@@ -25,6 +25,7 @@ seconds: Integer # How long to run the timer for, and how much will be added wit
 hours: Boolean # Whether the first digit should be hours
 resume: Boolean # Whether to resume the timer from current.txt on launch
 values: Dictionary # Program will look for text fiels with the given names and add time based on number specified
+multiplier: Boolean # If true, will look for value in second line of custom value and use it as a multiplier
 
 [font]
 name: String # Font name installed on the system
