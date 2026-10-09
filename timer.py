@@ -73,9 +73,14 @@ class Timer:
             f.write(tdelta)
 
         # separate seconds into each digit
-        minutes = disp_seconds // 60
-        rem_seconds = disp_seconds - (minutes * 60)
-        if s_timer["hours"]:
+        if s_timer["beats"]:
+            minutes = disp_seconds // 100
+            rem_seconds = disp_seconds - (minutes * 100)
+        else:
+            minutes = disp_seconds // 60
+            rem_seconds = disp_seconds - (minutes * 60)
+
+        if s_timer["hours"] and not s_timer["beats"]:
             hours = minutes // 60
             rem_minutes = minutes - (hours * 60)
             digit_list = [hours//1000, hours//100 % 100,
@@ -109,7 +114,10 @@ class Window(pyglet.window.Window):
         self.timer = Timer()
 
         # run tick() every second
-        pyglet.clock.schedule_interval(self.tick, 1)
+        if s_timer["beats"]:
+            pyglet.clock.schedule_interval(self.tick, 0.864)
+        else:
+            pyglet.clock.schedule_interval(self.tick, 1)
 
 
     def tick(self, dt):
