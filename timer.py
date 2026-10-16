@@ -48,8 +48,19 @@ class Timer:
             try:
                 with open(path.join(w_dir, "current.txt")) as f:
                     str_time = f.read()
-                self.seconds = sum(x * float(t) for x, t in zip([1, 60, 3600], reversed(str_time.split(":"))))
+
+                if ":" in str_time: # Timer was saved as seconds
+                    self.seconds = sum(x * float(t) for x, t in zip([1, 60, 3600], reversed(str_time.split(":"))))
+                    if s_timer["beats"]: # Converting seconds to centibeats
+                        self.seconds *= 1.1574
+
+                else: # Timer was saved as beats
+                    self.seconds = float(str_time) * 100
+                    if not s_timer["beats"]: # Converting centibeats to seconds
+                        self.seconds *= 0.864
+
             except:
+                print("Resume failed")
                 self.seconds = seconds(float(s_timer["seconds"]))
         else:
             self.seconds = seconds(float(s_timer["seconds"]))
