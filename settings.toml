@@ -1,13 +1,17 @@
 [timer]
 # How long to run the timer for, and how much will be added with the "add" command
-seconds = 100
+seconds = 1800
 # Whether to convert times > 60 minutes into hours
 hours = true
+# Whether to resume the timer from current.txt on launch
+resume = false
 # Whether to display the timer in beats
 # If this is true then the hours setting will be ignored
-beats = false
-# Whether to resume the timer from current.txt on launch
-resume = true
+beats = true
+# Whether to convert seconds into beats
+# If the above is true and this is true, added seconds will be converted into beats
+# If above is true and this is false, seconds will be treated as centibeats
+convert = true
 # Dictionary of custom values that program recognises
 # It will look for text files with the given names and then add time based on number inside
 # e.g. dollar containing 2.50 will add 150 seconds

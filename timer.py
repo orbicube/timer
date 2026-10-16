@@ -28,6 +28,13 @@ def clean_files(extra: str = None):
         if pathlib.Path(path.join(w_dir, f)).is_file():
             os.remove(path.join(w_dir, f))  
 
+def seconds(seconds: int|float):
+    # Converts seconds into the beats equivalent
+    if s_timer["beats"] and s_timer["convert"]:
+        seconds *= 1.1574
+
+    return seconds
+
 
 class Timer:
 
@@ -43,9 +50,9 @@ class Timer:
                     str_time = f.read()
                 self.seconds = sum(x * float(t) for x, t in zip([1, 60, 3600], reversed(str_time.split(":"))))
             except:
-                self.seconds = float(s_timer["seconds"])
+                self.seconds = seconds(float(s_timer["seconds"]))
         else:
-            self.seconds = float(s_timer["seconds"])
+            self.seconds = seconds(float(s_timer["seconds"]))
 
         for i in range(0,2):
             for j in range(0,4):
@@ -66,11 +73,15 @@ class Timer:
         else:
             disp_seconds = int(self.seconds)
 
-        with open(path.join(w_dir, "current.txt"), 'w') as f:
-            tdelta = str(datetime.timedelta(seconds=self.seconds))
-            if "." in tdelta:
-                tdelta = tdelta[:-7]
-            f.write(tdelta)
+        if self.active:
+            with open(path.join(w_dir, "current.txt"), 'w') as f:
+                if s_timer["beats"]:
+                    tdelta = f"{self.seconds/100:.2f}"
+                else:
+                    tdelta = str(datetime.timedelta(seconds=self.seconds))
+                    if "." in tdelta:
+                        tdelta = tdelta[:-7]
+                f.write(tdelta)
 
         # separate seconds into each digit
         if s_timer["beats"]:
@@ -146,13 +157,13 @@ class Window(pyglet.window.Window):
             self.timer.active = False
 
         if pathlib.Path(path.join(w_dir, "add")).is_file():
-            self.timer.seconds += s_timer["seconds"]
+            self.timer.seconds += seconds(s_timer["seconds"])
 
         if pathlib.Path(path.join(w_dir, "custom")).is_file():
             with open(path.join(w_dir, "custom")) as f:
                 # If file doesn't have an integer in it, just ignore it
                 try:
-                    self.timer.seconds += int(f.readline())
+                    self.timer.seconds += seconds(int(f.readline()))
                 except:
                     pass
 
@@ -184,10 +195,9 @@ class Window(pyglet.window.Window):
                         except:
                             pass
 
-                    self.timer.seconds += add_time
+                    self.timer.seconds += seconds(add_time)
                 except:
                     pass
-
 
         self.timer.update()
         self.timer.batch.draw()
