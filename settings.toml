@@ -7,7 +7,7 @@ hours = true
 resume = false
 # Whether to display the timer in beats
 # If this is true then the hours setting will be ignored
-beats = true
+beats = false
 # Whether to convert seconds into beats
 # If the above is true and this is true, added seconds will be converted into beats
 # If above is true and this is false, seconds will be treated as centibeats
